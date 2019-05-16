@@ -44,6 +44,12 @@ public class Banner<T> extends BannerBaseView {
 
     }
 
+    public interface OnItemSwitchListener<T> {
+
+        void onItemSwitch(int position, T item);
+
+    }
+
     public interface OnItemBindListener<T> {
 
         void onItemBind(int position, T item, ImageView view);
@@ -76,6 +82,7 @@ public class Banner<T> extends BannerBaseView {
     private OnItemBindListener<T> mOnItemBindListener;
 
     private OnItemClickListener<T> mOnItemClickListener;
+    private OnItemSwitchListener<T> mOnItemSwitchListener;
 
     private Drawable mIndicatorGainDrawable, mIndicatorMissDrawable;
 
@@ -256,13 +263,17 @@ public class Banner<T> extends BannerBaseView {
         }
     }
 
-    public void switchIndicator() {
+    private void switchIndicator() {
         if (mIsIndicatorShow && mLinearLayout != null && mLinearLayout.getChildCount() > 0) {
             for (int i = 0; i < mLinearLayout.getChildCount(); i++) {
                 if (mData != null && mData.size() > 0) {
                     ((AppCompatImageView) mLinearLayout.getChildAt(i)).setImageDrawable(i == mCurrentIndex % mData.size() ? mIndicatorGainDrawable : mIndicatorMissDrawable);
                 }
             }
+        }
+
+        if (mOnItemSwitchListener != null) {
+            mOnItemSwitchListener.onItemSwitch(mCurrentIndex % mData.size(), mData.get(mCurrentIndex % mData.size()));
         }
     }
 
@@ -419,6 +430,10 @@ public class Banner<T> extends BannerBaseView {
 
     public void setOnItemBindListener(OnItemBindListener<T> listener) {
         mOnItemBindListener = listener;
+    }
+
+    public void setOnItemSwitchListener(OnItemSwitchListener<T> listener) {
+        mOnItemSwitchListener = listener;
     }
 
     private int dp2px(int dp) {

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemBind(int position, Bean item, ImageView view) {
                 Glide.with(getApplicationContext()).load(item.getUrl()).into(view);
+                Log.e("sam", "onItemBind: " + position);
+            }
+        });
+
+        banner.setOnItemSwitchListener(new Banner.OnItemSwitchListener<Bean>() {
+            @Override
+            public void onItemSwitch(int position, Bean item) {
+                Log.e("sam", "onItemSwitch: " + position +"--------------------------");
             }
         });
     }
